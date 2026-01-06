@@ -19,6 +19,8 @@ export const PortfolioProvider = ({ children }) => {
   const [testimonials, setTestimonials] = useState([]);
   const [services, setServices] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [certificates, setCertificates] = useState([]);
+  const [achievements, setAchievements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -36,7 +38,9 @@ export const PortfolioProvider = ({ children }) => {
         experiencesRes,
         testimonialsRes,
         servicesRes,
-        blogsRes
+        blogsRes,
+        certificatesRes,
+        achievementsRes
       ] = await Promise.all([
         portfolioService.getAbout(),
         portfolioService.getSkills(),
@@ -44,7 +48,9 @@ export const PortfolioProvider = ({ children }) => {
         portfolioService.getExperiences(),
         portfolioService.getTestimonials({ featured: true, limit: 4 }),
         portfolioService.getServices(),
-        portfolioService.getBlogs({ published: true, limit: 3 })
+        portfolioService.getBlogs({ published: true, limit: 3 }),
+        portfolioService.getCertificates({ featured: true }),
+        portfolioService.getAchievements({ featured: true })
       ]);
 
       // Update state with fetched data
@@ -55,6 +61,8 @@ export const PortfolioProvider = ({ children }) => {
       if (testimonialsRes.success) setTestimonials(testimonialsRes.data);
       if (servicesRes.success) setServices(servicesRes.data);
       if (blogsRes.success) setBlogs(blogsRes.data);
+      if (certificatesRes.success) setCertificates(certificatesRes.data);
+      if (achievementsRes.success) setAchievements(achievementsRes.data);
 
       // Check for any errors
       const errors = [
@@ -64,7 +72,9 @@ export const PortfolioProvider = ({ children }) => {
         experiencesRes.error,
         testimonialsRes.error,
         servicesRes.error,
-        blogsRes.error
+        blogsRes.error,
+        certificatesRes.error,
+        achievementsRes.error
       ].filter(error => error);
 
       if (errors.length > 0) {
@@ -112,6 +122,22 @@ export const PortfolioProvider = ({ children }) => {
     return result;
   };
 
+  const fetchCertificates = async (params) => {
+    const result = await portfolioService.getCertificates(params);
+    if (result.success) {
+      setCertificates(result.data);
+    }
+    return result;
+  };
+
+  const fetchAchievements = async (params) => {
+    const result = await portfolioService.getAchievements(params);
+    if (result.success) {
+      setAchievements(result.data);
+    }
+    return result;
+  };
+
   // Refresh all data
   const refreshData = async () => {
     await fetchPortfolioData();
@@ -131,6 +157,8 @@ export const PortfolioProvider = ({ children }) => {
     testimonials,
     services,
     blogs,
+    certificates,
+    achievements,
     
     // Loading state
     isLoading,
@@ -144,6 +172,8 @@ export const PortfolioProvider = ({ children }) => {
     fetchSkills,
     fetchProjects,
     fetchExperiences,
+    fetchCertificates,
+    fetchAchievements,
   };
 
   return (

@@ -8,6 +8,8 @@ import SkillsPreview from './components/SkillsPreview';
 import ProjectsPreview from './components/ProjectsPreview';
 import ExperiencePreview from './components/ExperiencePreview';
 import ServicesPreview from './components/ServicesPreview';
+import CertificatesPreview from './components/Certificatespreview';
+import AchievementsPreview from './components/Achievementspreview';
 import BlogPreview from './components/BlogPreview';
 import TestimonialsPreview from './components/TestimonialsPreview';
 import Contact from './components/Contact';
@@ -23,10 +25,12 @@ function App() {
           <AboutPreview />
           <SkillsPreview />
           <ProjectsPreview />
-          <ServicesPreview/>
+          <ServicesPreview />
           <ExperiencePreview />
-          <BlogPreview/>
-          <TestimonialsPreview/>
+         <CertificatesPreview/>
+         <AchievementsPreview/>
+          <BlogPreview />
+          <TestimonialsPreview />
           <Contact />
         </Layout>
       </PortfolioProvider>

@@ -16,6 +16,8 @@ const Header = () => {
     { name: 'Blog', href: '#blog' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Contact', href: '#contact' },
+      { name: 'Certificates', href: '#certificates' },
+  { name: 'Achievements', href: '#achievements' },
   ];
 
   const handleCVDownload = () => {

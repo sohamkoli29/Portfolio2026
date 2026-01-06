@@ -141,6 +141,48 @@ export const portfolioService = {
     }
   },
 
+  // NEW: Fetch certificates
+  async getCertificates(params = {}) {
+    try {
+      const response = await api.get('/certificates', { params });
+      return {
+        success: true,
+        data: response.data.data,
+        count: response.data.count,
+        error: null
+      };
+    } catch (error) {
+      console.error('Error fetching certificates:', error);
+      return {
+        success: false,
+        data: [],
+        count: 0,
+        error: error.response?.data?.error || 'Failed to fetch certificates'
+      };
+    }
+  },
+
+  // NEW: Fetch achievements
+  async getAchievements(params = {}) {
+    try {
+      const response = await api.get('/achievements', { params });
+      return {
+        success: true,
+        data: response.data.data,
+        count: response.data.count,
+        error: null
+      };
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      return {
+        success: false,
+        data: [],
+        count: 0,
+        error: error.response?.data?.error || 'Failed to fetch achievements'
+      };
+    }
+  },
+
   async submitContact(data) {
     try {
       const response = await api.post('/content/contact', data);
