@@ -20,6 +20,7 @@ const AboutPreview = () => {
 
   return (
     <>
+    
       <Section
         id="about"
         title="About Me"
@@ -44,6 +45,7 @@ const AboutPreview = () => {
               </div>
             </div>
 
+           
             <div className="space-y-4">
               {about?.email && (
                 <div className="flex items-center space-x-3 text-gray-600">
@@ -108,6 +110,7 @@ const AboutPreview = () => {
           </div>
         </div>
       </Section>
+      
 
       {/* Full Bio Modal */}
       <Modal
@@ -189,6 +192,7 @@ const AboutPreview = () => {
           )}
         </div>
       </Modal>
+      
     </>
   );
 };
