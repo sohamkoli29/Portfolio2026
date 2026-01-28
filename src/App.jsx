@@ -1,19 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { PortfolioProvider } from './context/PortfolioContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import Hero from './components/Hero';
-import AboutPreview from './components/AboutPreview';
-import SkillsPreview from './components/SkillsPreview';
-import ProjectsPreview from './components/ProjectsPreview';
-import ExperiencePreview from './components/ExperiencePreview';
-import ServicesPreview from './components/ServicesPreview';
-import CertificatesPreview from './components/CertificatesPreview';
-import AchievementsPreview from './components/AchievementsPreview';
-import BlogPreview from './components/BlogPreview';
-import TestimonialsPreview from './components/TestimonialsPreview';
-import Contact from './components/Contact';
 import LoadingScreen from './components/LoadingScreen';
+import * as LazyComponents from './components/LazyComponents';
+
+// Loading fallback component
+const SectionLoader = () => (
+  <div className="flex justify-center py-12">
+    <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 function App() {
   return (
@@ -22,16 +20,46 @@ function App() {
         <LoadingScreen />
         <Layout>
           <Hero />
-          <AboutPreview />
-          <SkillsPreview />
-          <ProjectsPreview />
-          <ServicesPreview />
-          <ExperiencePreview />
-         <CertificatesPreview/>
-         <AchievementsPreview/>
-          <BlogPreview />
-          <TestimonialsPreview />
-          <Contact />
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.AboutPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.SkillsPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.ProjectsPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.ServicesPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.ExperiencePreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.CertificatesPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.AchievementsPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.BlogPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.TestimonialsPreview />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.Contact />
+          </Suspense>
         </Layout>
       </PortfolioProvider>
     </ErrorBoundary>

@@ -23,71 +23,69 @@ export const PortfolioProvider = ({ children }) => {
   const [achievements, setAchievements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [criticalDataLoaded, setCriticalDataLoaded] = useState(false);
   // Fetch all portfolio data
-  const fetchPortfolioData = async () => {
+
+    const fetchCriticalData = async () => {
     try {
       setIsLoading(true);
-      setError(null);
-
-      // Fetch data in parallel for better performance
-      const [
-        aboutRes,
-        skillsRes,
-        projectsRes,
-        experiencesRes,
-        testimonialsRes,
-        servicesRes,
-        blogsRes,
-        certificatesRes,
-        achievementsRes
-      ] = await Promise.all([
+      const [aboutRes, skillsRes] = await Promise.all([
         portfolioService.getAbout(),
-        portfolioService.getSkills(),
-        portfolioService.getProjects({ featured: true, limit: 3 }),
-        portfolioService.getExperiences(),
-        portfolioService.getTestimonials({ featured: true, limit: 4 }),
-        portfolioService.getServices(),
-        portfolioService.getBlogs({ published: true, limit: 3 }),
-        portfolioService.getCertificates({ featured: true }),
-        portfolioService.getAchievements({ featured: true })
+        portfolioService.getSkills()
       ]);
 
-      // Update state with fetched data
       if (aboutRes.success) setAbout(aboutRes.data);
       if (skillsRes.success) setSkills(skillsRes.data);
-      if (projectsRes.success) setProjects(projectsRes.data);
-      if (experiencesRes.success) setExperiences(experiencesRes.data);
-      if (testimonialsRes.success) setTestimonials(testimonialsRes.data);
-      if (servicesRes.success) setServices(servicesRes.data);
-      if (blogsRes.success) setBlogs(blogsRes.data);
-      if (certificatesRes.success) setCertificates(certificatesRes.data);
-      if (achievementsRes.success) setAchievements(achievementsRes.data);
-
-      // Check for any errors
-      const errors = [
-        aboutRes.error,
-        skillsRes.error,
-        projectsRes.error,
-        experiencesRes.error,
-        testimonialsRes.error,
-        servicesRes.error,
-        blogsRes.error,
-        certificatesRes.error,
-        achievementsRes.error
-      ].filter(error => error);
-
-      if (errors.length > 0) {
-        console.warn('Some data failed to load:', errors);
-      }
-
+      
+      setCriticalDataLoaded(true);
     } catch (error) {
-      console.error('Error fetching portfolio data:', error);
-      setError('Failed to load portfolio data. Please try again later.');
+      console.error('Error loading critical data:', error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Load non-critical data after critical data
+  const fetchNonCriticalData = async () => {
+    const [
+      projectsRes,
+      experiencesRes,
+      testimonialsRes,
+      servicesRes,
+      blogsRes,
+      certificatesRes,
+      achievementsRes
+    ] = await Promise.all([
+      portfolioService.getProjects({ featured: true, limit: 3 }),
+      portfolioService.getExperiences(),
+      portfolioService.getTestimonials({ featured: true, limit: 4 }),
+      portfolioService.getServices(),
+      portfolioService.getBlogs({ published: true, limit: 3 }),
+      portfolioService.getCertificates({ featured: true }),
+      portfolioService.getAchievements({ featured: true })
+    ]);
+
+    if (projectsRes.success) setProjects(projectsRes.data);
+    if (experiencesRes.success) setExperiences(experiencesRes.data);
+    if (testimonialsRes.success) setTestimonials(testimonialsRes.data);
+    if (servicesRes.success) setServices(servicesRes.data);
+    if (blogsRes.success) setBlogs(blogsRes.data);
+    if (certificatesRes.success) setCertificates(certificatesRes.data);
+    if (achievementsRes.success) setAchievements(achievementsRes.data);
+  };
+
+  useEffect(() => {
+    fetchCriticalData();
+  }, []);
+
+  useEffect(() => {
+    if (criticalDataLoaded) {
+      fetchNonCriticalData();
+    }
+  }, [criticalDataLoaded]);
+
+  
+
 
   // Fetch single resource functions
   const fetchAbout = async () => {
@@ -139,14 +137,13 @@ export const PortfolioProvider = ({ children }) => {
   };
 
   // Refresh all data
-  const refreshData = async () => {
-    await fetchPortfolioData();
-  };
+const refreshData = async () => {
+  await fetchCriticalData();
+};
+
 
   // Initial data fetch
-  useEffect(() => {
-    fetchPortfolioData();
-  }, []);
+
 
   const value = {
     // Data
