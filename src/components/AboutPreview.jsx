@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, MapPin, Mail, Phone, Calendar, X } from 'lucide-react';
+import { Mail, MapPin, Phone, Download, User } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import Section from './Section';
 import Modal from './Modal';
@@ -8,191 +8,87 @@ const AboutPreview = () => {
   const { about, isLoading } = usePortfolio();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (isLoading && !about) {
-    return (
-      <Section id="about" title="About Me">
-        <div className="flex justify-center py-12">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      </Section>
-    );
-  }
-
   return (
     <>
-    
-      <Section
-        id="about"
-        title="About Me"
-        subtitle={about?.title || "Get to know who I am, what I do, and what drives me"}
-      >
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Image/Info */}
-          <div className="space-y-6">
-            <div className="relative">
-              <div className="w-64 h-64 rounded-full overflow-hidden mx-auto border-4 border-white shadow-xl">
-                {about?.image_url ? (
-                  <img
-                    src={about.image_url}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                    <User className="w-32 h-32 text-white" />
-                  </div>
-                )}
-              </div>
-            </div>
+      <Section id="about" title="About Me" subtitle="A little about who I am and what drives me">
+        <div className="about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '3.5rem', alignItems: 'center' }}>
 
-           
-            <div className="space-y-4">
+          {/* Image */}
+          <div style={{ position: 'relative' }}>
+            <div className="about-img" style={{ width: '100%', aspectRatio: '3/4', borderRadius: '24px', overflow: 'hidden', background: 'linear-gradient(135deg,rgba(124,58,237,0.2),rgba(236,72,153,0.1))', border: '1px solid rgba(124,58,237,0.25)', position: 'relative' }}>
+              {about?.image_url
+                ? <img src={about.image_url} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><User size={72} color="rgba(139,92,246,0.25)" /></div>
+              }
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,15,0.5) 0%, transparent 60%)', pointerEvents: 'none' }} />
+            </div>
+            <div style={{ position: 'absolute', bottom: '-14px', right: '-14px', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', borderRadius: '14px', padding: '0.85rem 1rem', boxShadow: '0 12px 32px rgba(124,58,237,0.4)' }}>
+              <div style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '1.4rem', color: 'white', lineHeight: 1 }}>2+</div>
+              <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.68rem', marginTop: '2px' }}>Years Exp</div>
+            </div>
+          </div>
+
+          {/* Info */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <p className="section-label" style={{ marginBottom: '0.4rem' }}>Who I Am</p>
+              <h3 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 700, fontSize: 'clamp(1.2rem,3vw,1.5rem)', color: '#f1f0ff', lineHeight: 1.25 }}>
+                {about?.title || 'Full Stack Developer & Tech Enthusiast'}
+              </h3>
+            </div>
+            <p style={{ color: '#9490b5', lineHeight: 1.8, fontSize: '0.9rem' }}>
+              {about?.description?.substring(0, 280) || 'Passionate full-stack developer with experience building modern web applications. Specialized in React, Node.js, and cloud technologies.'}
+              {(about?.description?.length || 0) > 280 ? '...' : ''}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {about?.email && (
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Mail className="w-5 h-5" />
-                  <span>{about.email}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', background: 'rgba(124,58,237,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Mail size={13} color="#8b5cf6" /></div>
+                  <span style={{ color: '#c4b5fd', fontSize: '0.85rem' }}>{about.email}</span>
                 </div>
               )}
               {about?.phone && (
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <Phone className="w-5 h-5" />
-                  <span>{about.phone}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', background: 'rgba(124,58,237,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Phone size={13} color="#8b5cf6" /></div>
+                  <span style={{ color: '#c4b5fd', fontSize: '0.85rem' }}>{about.phone}</span>
                 </div>
               )}
               {about?.location && (
-                <div className="flex items-center space-x-3 text-gray-600">
-                  <MapPin className="w-5 h-5" />
-                  <span>{about.location}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', background: 'rgba(124,58,237,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><MapPin size={13} color="#8b5cf6" /></div>
+                  <span style={{ color: '#c4b5fd', fontSize: '0.85rem' }}>{about.location}</span>
                 </div>
               )}
             </div>
-
-            {about?.cv_url && (
-              <div className="text-center">
-                <a
-                  href={about.cv_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  Download CV
+            <div className="btn-stack" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '0.25rem' }}>
+              <button onClick={() => setIsModalOpen(true)} className="btn-primary">Read Full Bio</button>
+              {about?.cv_url && (
+                <a href={about.cv_url} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <Download size={13} /> Download CV
                 </a>
-              </div>
-            )}
-          </div>
-
-          {/* Bio Preview */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-gray-900">
-              {about?.title?.split('&')[0] || 'Full Stack Developer'}
-            </h3>
-            
-            <div className="text-gray-600">
-              {about?.description ? (
-                <p className="line-clamp-6">{about.description}</p>
-              ) : (
-                <p className="line-clamp-6">
-                  Passionate full-stack developer with 5+ years of experience building modern web applications.
-                  Specialized in React, Node.js, and cloud technologies. I believe in writing clean, maintainable 
-                  code and creating user experiences that are both beautiful and functional.
-                </p>
               )}
-            </div>
-
-            <div className="pt-4">
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                Read Full Bio
-              </button>
             </div>
           </div>
         </div>
       </Section>
-      
 
-      {/* Full Bio Modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="About Me"
-        size="lg"
-      >
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-6">
-            {about?.image_url && (
-              <div className="flex-shrink-0">
-                <img
-                  src={about.image_url}
-                  alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-blue-100"
-                />
-              </div>
-            )}
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                {about?.title || 'Full Stack Developer & Tech Enthusiast'}
-              </h3>
-              <div className="space-y-2">
-                {about?.email && (
-                  <div className="flex items-center text-gray-600">
-                    <Mail className="w-4 h-4 mr-2" />
-                    <span>{about.email}</span>
-                  </div>
-                )}
-                {about?.phone && (
-                  <div className="flex items-center text-gray-600">
-                    <Phone className="w-4 h-4 mr-2" />
-                    <span>{about.phone}</span>
-                  </div>
-                )}
-                {about?.location && (
-                  <div className="flex items-center text-gray-600">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span>{about.location}</span>
-                  </div>
-                )}
-              </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="About Me" size="lg">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+            {about?.image_url && <img src={about.image_url} alt="Profile" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(124,58,237,0.4)' }} />}
+            <div>
+              <h4 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 700, color: '#f1f0ff', fontSize: '1.1rem', marginBottom: '4px' }}>{about?.title}</h4>
+              {about?.email && <p style={{ color: '#9490b5', fontSize: '0.85rem' }}>{about.email}</p>}
             </div>
           </div>
-
-          <div className="prose prose-lg max-w-none">
-            <div className="text-gray-700 whitespace-pre-line leading-relaxed">
-              {about?.description || (
-                <>
-                  <p>
-                    Passionate full-stack developer with 5+ years of experience building modern web applications.
-                    Specialized in React, Node.js, and cloud technologies.
-                  </p>
-                  <p>
-                    I believe in writing clean, maintainable code and creating user experiences that are both
-                    beautiful and functional. Always eager to learn new technologies and solve complex problems.
-                  </p>
-                  <p>
-                    When I'm not coding, you can find me exploring new frameworks, contributing to open-source
-                    projects, or mentoring aspiring developers.
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-
+          <p style={{ color: '#9490b5', lineHeight: 1.9, whiteSpace: 'pre-line' }}>{about?.description || 'Passionate full-stack developer.'}</p>
           {about?.cv_url && (
-            <div className="flex justify-center pt-6 border-t">
-              <a
-                href={about.cv_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                Download Full CV
-              </a>
-            </div>
+            <a href={about.cv_url} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              <Download size={13} /> Download Full CV
+            </a>
           )}
         </div>
       </Modal>
-      
     </>
   );
 };

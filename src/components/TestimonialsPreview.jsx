@@ -1,83 +1,50 @@
 import React, { useState } from 'react';
-import { Quote, Star, User } from 'lucide-react';
+import { Quote, Star } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import Section from './Section';
 import Modal from './Modal';
 
 const TestimonialsPreview = () => {
   const { testimonials, isLoading } = usePortfolio();
-  const [showAllTestimonials, setShowAllTestimonials] = useState(false);
-  const [selectedTestimonial, setSelectedTestimonial] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+  const [selected, setSelected] = useState(null);
 
-  const featuredTestimonials = testimonials.filter(t => t.featured).slice(0, 3);
+  const featured = testimonials.filter(t => t.featured).slice(0, 3);
 
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-      />
-    ));
-  };
+  const renderStars = (rating) => Array.from({ length: 5 }, (_, i) => (
+    <Star key={i} size={12} style={{ color: i < rating ? '#f59e0b' : '#524f6e', fill: i < rating ? '#f59e0b' : 'none' }} />
+  ));
 
-  const TestimonialCard = ({ testimonial, isCompact = false, onRead = null }) => (
-    <div className={`bg-white ${isCompact ? 'p-4' : 'p-6'} rounded-xl shadow-sm hover-lift transition-all duration-300 border border-gray-100`}>
-      <div className="flex items-start gap-4 mb-4">
-        {testimonial.avatar_url ? (
-          <img
-            src={testimonial.avatar_url}
-            alt={testimonial.name}
-            className={`${isCompact ? 'w-10 h-10' : 'w-12 h-12'} rounded-full object-cover flex-shrink-0`}
-          />
+  const Card = ({ t, compact = false }) => (
+    <div className="dark-card" style={{ padding: '1.5rem', cursor: 'pointer' }} onClick={() => setSelected(t)}>
+      <Quote size={20} style={{ color: '#7c3aed', opacity: 0.5, marginBottom: '1rem' }} />
+      <p style={{ color: '#9490b5', lineHeight: 1.7, fontSize: '0.88rem', fontStyle: 'italic', display: '-webkit-box', WebkitLineClamp: compact ? 3 : 4, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginBottom: '1.25rem' }}>
+        "{t.content}"
+      </p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingTop: '1rem', borderTop: '1px solid rgba(124,58,237,0.1)' }}>
+        {t.avatar_url ? (
+          <img src={t.avatar_url} alt={t.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
         ) : (
-          <div className={`${isCompact ? 'w-10 h-10' : 'w-12 h-12'} bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0`}>
-            {testimonial.name.charAt(0)}
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #7c3aed, #ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: '0.9rem', flexShrink: 0 }}>
+            {t.name[0]}
           </div>
         )}
-        
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-gray-900 truncate">{testimonial.name}</p>
-          <div className="text-sm text-gray-600 truncate">
-            {testimonial.role && <span>{testimonial.role}</span>}
-            {testimonial.role && testimonial.company && <span> · </span>}
-            {testimonial.company && <span className="font-medium">{testimonial.company}</span>}
-          </div>
-          <div className="flex items-center mt-1">
-            {renderStars(testimonial.rating || 5)}
-          </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: '#f1f0ff', fontSize: '0.88rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.name}</p>
+          <p style={{ color: '#9490b5', fontSize: '0.75rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {t.role}{t.role && t.company && ' · '}{t.company}
+          </p>
         </div>
+        <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>{renderStars(t.rating || 5)}</div>
       </div>
-
-      <Quote className={`${isCompact ? 'w-6 h-6' : 'w-8 h-8'} text-blue-600 opacity-20 mb-2`} />
-      
-      <p className={`text-gray-700 ${isCompact ? 'text-sm line-clamp-3' : 'line-clamp-4'} italic leading-relaxed mb-4`}>
-        "{testimonial.content}"
-      </p>
-
-      {onRead && (
-        <button
-          onClick={() => onRead(testimonial)}
-          className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center transition-all hover:gap-2"
-        >
-          Read More
-          <svg className="w-4 h-4 ml-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      )}
     </div>
   );
 
   if (isLoading && testimonials.length === 0) {
     return (
-      <Section
-        id="testimonials"
-        title="Client Testimonials"
-        subtitle="What people say about working with me"
-        className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl"
-      >
-        <div className="flex justify-center py-12">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <Section id="testimonials" title="Client Testimonials" dark>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
+          {[1,2,3].map(i => <div key={i} className="skeleton" style={{ height: '200px', borderRadius: '16px' }} />)}
         </div>
       </Section>
     );
@@ -85,108 +52,64 @@ const TestimonialsPreview = () => {
 
   return (
     <>
-      <Section
-        id="testimonials"
-        title="Client Testimonials"
-        subtitle="What people say about working with me"
-        className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl"
-      >
-        {featuredTestimonials.length > 0 ? (
+      <Section id="testimonials" title="Client's Stories" subtitle="What clients say about working with me" dark>
+        {featured.length > 0 ? (
           <>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredTestimonials.map((testimonial) => (
-                <TestimonialCard 
-                  key={testimonial.id} 
-                  testimonial={testimonial}
-                  onRead={setSelectedTestimonial}
-                />
-              ))}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }} className="testi-grid">
+              {featured.map(t => <Card key={t.id} t={t} />)}
             </div>
-
             {testimonials.length > 3 && (
-              <div className="text-center mt-12">
-                <button 
-                  onClick={() => setShowAllTestimonials(true)}
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
+              <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <button onClick={() => setShowAll(true)} className="btn-outline">
                   View All {testimonials.length} Testimonials
                 </button>
               </div>
             )}
           </>
         ) : (
-          <div className="text-center py-12">
-            <Quote className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Testimonials Available</h3>
-            <p className="text-gray-600">Client testimonials will be displayed here once added.</p>
+          <div style={{ textAlign: 'center', padding: '4rem', color: '#524f6e' }}>
+            <Quote size={48} style={{ margin: '0 auto 1rem', display: 'block' }} />
+            <p>Testimonials will appear once added to the CMS.</p>
           </div>
         )}
       </Section>
 
-      {/* Single Testimonial Detail Modal */}
-      {selectedTestimonial && (
-        <Modal
-          isOpen={!!selectedTestimonial}
-          onClose={() => setSelectedTestimonial(null)}
-          title="Client Review"
-          size="md"
-        >
-          <div className="space-y-6">
-            <div className="flex items-start gap-4">
-              {selectedTestimonial.avatar_url ? (
-                <img
-                  src={selectedTestimonial.avatar_url}
-                  alt={selectedTestimonial.name}
-                  className="w-16 h-16 rounded-full object-cover flex-shrink-0"
-                />
+      {/* Single modal */}
+      {selected && (
+        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title="Client Review" size="md">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              {selected.avatar_url ? (
+                <img src={selected.avatar_url} alt={selected.name} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
               ) : (
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                  {selectedTestimonial.name.charAt(0)}
+                <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700, fontSize: '1.2rem' }}>
+                  {selected.name[0]}
                 </div>
               )}
-              
-              <div className="flex-1">
-                <h4 className="font-bold text-xl text-gray-900">{selectedTestimonial.name}</h4>
-                <div className="text-gray-600 mt-1">
-                  {selectedTestimonial.role && <span>{selectedTestimonial.role}</span>}
-                  {selectedTestimonial.role && selectedTestimonial.company && <span> at </span>}
-                  {selectedTestimonial.company && <span className="font-medium text-gray-900">{selectedTestimonial.company}</span>}
-                </div>
-                <div className="flex items-center mt-2">
-                  {renderStars(selectedTestimonial.rating || 5)}
-                  <span className="ml-2 text-sm text-gray-600">({selectedTestimonial.rating || 5}/5)</span>
-                </div>
+              <div>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#f1f0ff', fontSize: '1rem' }}>{selected.name}</p>
+                <p style={{ color: '#9490b5', fontSize: '0.82rem' }}>{selected.role}{selected.role && selected.company && ' at '}{selected.company}</p>
+                <div style={{ display: 'flex', gap: '2px', marginTop: '4px' }}>{renderStars(selected.rating || 5)}</div>
               </div>
             </div>
-
-            <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <Quote className="w-10 h-10 text-blue-600 opacity-30 mb-4" />
-              <p className="text-gray-800 text-lg leading-relaxed italic">
-                "{selectedTestimonial.content}"
-              </p>
+            <div style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '12px', padding: '1.25rem' }}>
+              <Quote size={20} style={{ color: '#7c3aed', opacity: 0.4, marginBottom: '0.75rem' }} />
+              <p style={{ color: '#c4b5fd', lineHeight: 1.8, fontStyle: 'italic' }}>"{selected.content}"</p>
             </div>
           </div>
         </Modal>
       )}
 
-      {/* All Testimonials Modal */}
-      <Modal
-        isOpen={showAllTestimonials}
-        onClose={() => setShowAllTestimonials(false)}
-        title={`Client Testimonials (${testimonials.length})`}
-        size="xl"
-      >
-        <div className="grid md:grid-cols-2 gap-4">
-          {testimonials.map((testimonial) => (
-            <TestimonialCard 
-              key={testimonial.id} 
-              testimonial={testimonial} 
-              isCompact
-              onRead={setSelectedTestimonial}
-            />
-          ))}
+      <Modal isOpen={showAll} onClose={() => setShowAll(false)} title={`All Testimonials (${testimonials.length})`} size="xl">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '16px' }}>
+          {testimonials.map(t => <Card key={t.id} t={t} compact />)}
         </div>
       </Modal>
+
+      <style>{`
+        @media (max-width: 768px) { .testi-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 900px) and (min-width: 600px) { .testi-grid { grid-template-columns: repeat(2,1fr) !important; } }
+      `}</style>
     </>
   );
 };

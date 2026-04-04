@@ -6,99 +6,52 @@ import Modal from './Modal';
 
 const CertificatesPreview = () => {
   const { certificates = [], isLoading } = usePortfolio();
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
-  const [showAllCertificates, setShowAllCertificates] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
-  const featuredCertificates = certificates.filter(c => c.featured).slice(0, 4);
+  const featured = certificates.filter(c => c.featured).slice(0, 4);
+  const formatDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      year: 'numeric',
-    });
-  };
-
-  const CertificateCard = ({ certificate, onClick }) => (
-    <div className="bg-white rounded-xl overflow-hidden border border-gray-200 hover-lift transition-all duration-300 shadow-sm hover:shadow-md">
-      <div className="h-40 relative overflow-hidden">
-        {certificate.image_url ? (
-          <img
-            src={certificate.image_url}
-            alt={certificate.title}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-          />
+  const Card = ({ cert }) => (
+    <div className="dark-card" style={{ padding: '1.25rem', cursor: 'pointer' }} onClick={() => setSelected(cert)}>
+      <div style={{ height: '120px', borderRadius: '10px', overflow: 'hidden', marginBottom: '1rem', background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.15))', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        {cert.image_url ? (
+          <img src={cert.image_url} alt={cert.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-            <Award className="w-16 h-16 text-white opacity-50" />
-          </div>
+          <Award size={36} color="rgba(139,92,246,0.3)" />
         )}
-        
-        {certificate.featured && (
-          <div className="absolute top-3 right-3">
-            <div className="p-1.5 bg-yellow-500 rounded-full">
-              <Award className="w-4 h-4 text-white" />
-            </div>
+        {cert.featured && (
+          <div style={{ position: 'absolute', top: '8px', right: '8px', width: '28px', height: '28px', background: 'linear-gradient(135deg,#f59e0b,#f97316)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Award size={13} color="white" />
           </div>
         )}
       </div>
-
-      <div className="p-5">
-        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-          {certificate.title}
-        </h3>
-
-        <div className="flex items-center text-sm text-gray-600 mb-3">
-          <BookOpen className="w-4 h-4 mr-1.5" />
-          <span className="font-medium">{certificate.issuer}</span>
-        </div>
-
-        <div className="flex items-center text-sm text-gray-500 mb-4">
-          <Calendar className="w-4 h-4 mr-1.5" />
-          <span>Issued {formatDate(certificate.issue_date)}</span>
-        </div>
-
-        {certificate.description && (
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-            {certificate.description}
-          </p>
-        )}
-
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-          {certificate.verification_url ? (
-            <a
-              href={certificate.verification_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink className="w-4 h-4 mr-1" />
-              Verify
-            </a>
-          ) : (
-            <div />
-          )}
-          
-          <button
-            onClick={() => onClick(certificate)}
-            className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center"
-          >
-            View Details
-            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+      <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: '#f1f0ff', fontSize: '0.88rem', lineHeight: 1.4, marginBottom: '6px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+        {cert.title}
+      </h3>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#8b5cf6', fontSize: '0.75rem', marginBottom: '4px' }}>
+        <BookOpen size={10} /> <span style={{ fontWeight: 500 }}>{cert.issuer}</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#524f6e', fontSize: '0.72rem', marginBottom: '10px' }}>
+        <Calendar size={10} /> Issued {formatDate(cert.issue_date)}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid rgba(124,58,237,0.1)' }}>
+        {cert.verification_url ? (
+          <a href={cert.verification_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+            style={{ color: '#8b5cf6', fontSize: '0.75rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 500 }}>
+            <ExternalLink size={10} /> Verify
+          </a>
+        ) : <div />}
+        <span style={{ color: '#7c3aed', fontSize: '0.72rem', fontWeight: 500 }}>View →</span>
       </div>
     </div>
   );
 
   if (isLoading && certificates.length === 0) {
     return (
-      <Section id="certificates" title="Certifications" subtitle="Professional certifications and credentials" className="bg-gray-50 rounded-3xl">
-        <div className="flex justify-center py-12">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <Section id="certificates" title="Certifications" dark>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px' }}>
+          {[1,2,3,4].map(i => <div key={i} className="skeleton" style={{ height: '240px', borderRadius: '16px' }} />)}
         </div>
       </Section>
     );
@@ -106,131 +59,66 @@ const CertificatesPreview = () => {
 
   return (
     <>
-      <Section id="certificates" title="Certifications" subtitle="Professional certifications and credentials" className="bg-gray-50 rounded-3xl">
-        {featuredCertificates.length > 0 ? (
+      <Section id="certificates" title="Certifications" subtitle="Professional credentials and certifications" dark>
+        {featured.length > 0 ? (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredCertificates.map((certificate) => (
-                <CertificateCard
-                  key={certificate.id}
-                  certificate={certificate}
-                  onClick={setSelectedCertificate}
-                />
-              ))}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px' }} className="cert-grid">
+              {featured.map(c => <Card key={c.id} cert={c} />)}
             </div>
-
             {certificates.length > 4 && (
-              <div className="text-center mt-12">
-                <button
-                  onClick={() => setShowAllCertificates(true)}
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
-                >
-                  View All {certificates.length} Certificates
-                </button>
+              <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <button onClick={() => setShowAll(true)} className="btn-primary">View All {certificates.length} Certificates</button>
               </div>
             )}
           </>
         ) : (
-          <div className="text-center py-12">
-            <Award className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Certificates Available</h3>
-            <p className="text-gray-600">Certificates will be displayed here once added.</p>
+          <div style={{ textAlign: 'center', padding: '4rem', color: '#524f6e' }}>
+            <Award size={48} style={{ margin: '0 auto 1rem', display: 'block' }} />
+            <p>Certificates will appear once added to the CMS.</p>
           </div>
         )}
       </Section>
 
-      {/* Certificate Details Modal */}
-      {selectedCertificate && (
-        <Modal
-          isOpen={!!selectedCertificate}
-          onClose={() => setSelectedCertificate(null)}
-          title={selectedCertificate.title}
-          size="lg"
-        >
-          <div className="space-y-6">
-            {selectedCertificate.image_url && (
-              <div>
-                <img
-                  src={selectedCertificate.image_url}
-                  alt={selectedCertificate.title}
-                  className="w-full h-auto object-contain rounded-lg border border-gray-200"
-                />
+      {selected && (
+        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="md">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {selected.image_url && <img src={selected.image_url} alt={selected.title} style={{ width: '100%', borderRadius: '12px', border: '1px solid rgba(124,58,237,0.2)' }} />}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <BookOpen size={15} color="#9490b5" />
+                <div><p style={{ color: '#524f6e', fontSize: '0.72rem', marginBottom: '2px' }}>Issued By</p><p style={{ color: '#c4b5fd', fontWeight: 600 }}>{selected.issuer}</p></div>
               </div>
-            )}
-
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <BookOpen className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
-                <div>
-                  <div className="text-sm text-gray-500 mb-1">Issued By</div>
-                  <div className="font-semibold text-gray-900 text-lg">{selectedCertificate.issuer}</div>
-                </div>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <Calendar size={15} color="#9490b5" />
+                <div><p style={{ color: '#524f6e', fontSize: '0.72rem', marginBottom: '2px' }}>Issue Date</p><p style={{ color: '#c4b5fd', fontWeight: 600 }}>{formatDate(selected.issue_date)}</p></div>
               </div>
-
-              <div className="flex items-start">
-                <Calendar className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
-                <div>
-                  <div className="text-sm text-gray-500 mb-1">Issue Date</div>
-                  <div className="font-semibold text-gray-900">{formatDate(selectedCertificate.issue_date)}</div>
-                </div>
-              </div>
-
-              {selectedCertificate.credential_id && (
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
-                  <div>
-                    <div className="text-sm text-gray-500 mb-1">Credential ID</div>
-                    <div className="font-mono text-sm bg-gray-100 px-3 py-2 rounded">
-                      {selectedCertificate.credential_id}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {selectedCertificate.description && (
-                <div className="pt-4 border-t">
-                  <div className="text-sm text-gray-500 mb-2">Description</div>
-                  <p className="text-gray-700 leading-relaxed">
-                    {selectedCertificate.description}
-                  </p>
+              {selected.credential_id && (
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                  <CheckCircle size={15} color="#9490b5" />
+                  <div><p style={{ color: '#524f6e', fontSize: '0.72rem', marginBottom: '2px' }}>Credential ID</p><code style={{ color: '#c4b5fd', background: 'rgba(124,58,237,0.1)', padding: '3px 8px', borderRadius: '6px', fontSize: '0.8rem' }}>{selected.credential_id}</code></div>
                 </div>
               )}
             </div>
-
-            {selectedCertificate.verification_url && (
-              <div className="pt-6 border-t">
-                <a
-                  href={selectedCertificate.verification_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Verify Certificate
-                </a>
-              </div>
+            {selected.description && <p style={{ color: '#9490b5', lineHeight: 1.7, fontSize: '0.9rem' }}>{selected.description}</p>}
+            {selected.verification_url && (
+              <a href={selected.verification_url} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                <ExternalLink size={14} /> Verify Certificate
+              </a>
             )}
           </div>
         </Modal>
       )}
 
-      {/* All Certificates Modal */}
-      <Modal
-        isOpen={showAllCertificates}
-        onClose={() => setShowAllCertificates(false)}
-        title={`All Certificates (${certificates.length})`}
-        size="xl"
-      >
-        <div className="grid md:grid-cols-3 gap-6">
-          {certificates.map((certificate) => (
-            <CertificateCard
-              key={certificate.id}
-              certificate={certificate}
-              onClick={setSelectedCertificate}
-            />
-          ))}
+      <Modal isOpen={showAll} onClose={() => setShowAll(false)} title={`All Certificates (${certificates.length})`} size="xl">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
+          {certificates.map(c => <Card key={c.id} cert={c} />)}
         </div>
       </Modal>
+
+      <style>{`
+        @media (max-width: 900px) { .cert-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 500px) { .cert-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </>
   );
 };

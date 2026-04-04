@@ -18,18 +18,21 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="max-w-md w-full p-8 text-center">
-            <div className="inline-flex p-4 bg-red-100 rounded-full mb-6">
-              <AlertTriangle className="w-12 h-12 text-red-600" />
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0f' }}>
+          <div style={{ maxWidth: '440px', width: '100%', padding: '2.5rem', textAlign: 'center' }}>
+            <div style={{ width: '64px', height: '64px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+              <AlertTriangle size={28} color="#ef4444" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Something went wrong</h2>
-            <p className="text-gray-600 mb-6">
-              We're having trouble loading the portfolio content. Please try refreshing the page.
+            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#f1f0ff', fontSize: '1.3rem', marginBottom: '0.75rem' }}>
+              Something went wrong
+            </h2>
+            <p style={{ color: '#9490b5', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+              We're having trouble loading the portfolio. Please try refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="btn-primary"
+              style={{ margin: '0 auto' }}
             >
               Refresh Page
             </button>
@@ -37,7 +40,6 @@ class ErrorBoundary extends React.Component {
         </div>
       );
     }
-
     return this.props.children;
   }
 }

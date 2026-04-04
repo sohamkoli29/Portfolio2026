@@ -2,71 +2,96 @@ import React from 'react';
 import { Github, Linkedin, Twitter, Mail, Code2 } from 'lucide-react';
 
 const Footer = () => {
-  const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
+  const socials = [
+    { icon: Github, href: 'https://github.com/sohamkoli29', label: 'GitHub' },
     { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
     { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
     { icon: Mail, href: 'mailto:hello@portfolio.com', label: 'Email' },
   ];
 
+  const links = [
+    { name: 'Services', href: '#services' },
+    { name: 'Works', href: '#projects' },
+    { name: 'About', href: '#about' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Blog', href: '#blog' },
+    { name: 'Contact', href: '#contact' },
+  ];
+
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer style={{ borderTop: '1px solid rgba(124,58,237,0.15)', background: 'rgba(10,10,15,0.9)', backdropFilter: 'blur(20px)' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 2rem 2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '3rem', marginBottom: '2.5rem' }} className="footer-grid">
+          
           {/* Brand */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="p-2 bg-blue-600 rounded-lg">
-                <Code2 className="w-6 h-6" />
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1rem' }}>
+              <div style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg,#7c3aed,#ec4899)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Code2 size={18} color="white" />
               </div>
-              <span className="text-xl font-bold">Soham <span className='text-blue-600'>Koli</span></span>
+              <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#f1f0ff', fontSize: '1.1rem' }}>
+                Soham <span style={{ color: '#8b5cf6' }}>Koli</span>
+              </span>
             </div>
-            <p className="text-gray-400">
-              Full-stack developer crafting digital experiences with modern technologies.
+            <p style={{ color: '#524f6e', fontSize: '0.85rem', lineHeight: 1.7, maxWidth: '280px' }}>
+              Full-stack developer crafting digital experiences with modern technologies. Open to new opportunities.
             </p>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '1.25rem' }}>
+              {socials.map(({ icon: Icon, href, label }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+                  style={{ width: '36px', height: '36px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9490b5', textDecoration: 'none', transition: 'all 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,58,237,0.15)'; e.currentTarget.style.color = '#c4b5fd'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = '#9490b5'; }}
+                >
+                  <Icon size={14} />
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><a href="#home" className="text-gray-400 hover:text-white transition-colors">Home</a></li>
-              <li><a href="#about" className="text-gray-400 hover:text-white transition-colors">About</a></li>
-              <li><a href="#projects" className="text-gray-400 hover:text-white transition-colors">Projects</a></li>
-              <li><a href="#blog" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#contact" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+            <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: '#f1f0ff', fontSize: '0.9rem', marginBottom: '1rem' }}>Quick Links</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {links.map(l => (
+                <li key={l.name}>
+                  <a href={l.href} style={{ color: '#524f6e', fontSize: '0.83rem', textDecoration: 'none', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.target.style.color = '#9490b5'}
+                    onMouseLeave={e => e.target.style.color = '#524f6e'}
+                  >
+                    {l.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Social Links */}
+          {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Connect</h3>
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 bg-gray-800 rounded-lg hover:bg-blue-600 transition-colors"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                );
-              })}
-            </div>
+            <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: '#f1f0ff', fontSize: '0.9rem', marginBottom: '1rem' }}>Services</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {['Full Stack Dev', 'UI/UX Design', 'Mobile Apps', 'API Integration', 'Database Design'].map(s => (
+                <li key={s} style={{ color: '#524f6e', fontSize: '0.83rem' }}>{s}</li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
-          <p className="mt-2 text-sm">Built with React, Tailwind CSS & Custom CMS</p>
+        {/* Bottom bar */}
+        <div style={{ borderTop: '1px solid rgba(124,58,237,0.1)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <p style={{ color: '#524f6e', fontSize: '0.78rem' }}>
+            © {new Date().getFullYear()} Soham Koli. All rights reserved.
+          </p>
+          <p style={{ color: '#524f6e', fontSize: '0.78rem' }}>
+            Built with React, Tailwind CSS & Custom CMS
+          </p>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; } }
+        @media (max-width: 500px) { .footer-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </footer>
   );
 };

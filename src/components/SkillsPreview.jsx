@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Code2, Palette, Server, Database, Award } from 'lucide-react';
+import { Code2, Server, Database, Palette, Award } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import Section from './Section';
 import Modal from './Modal';
@@ -8,59 +8,56 @@ const SkillsPreview = () => {
   const { skills, isLoading } = usePortfolio();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const getCategoryIcon = (category) => {
-    switch (category.toLowerCase()) {
+  const getCategoryIcon = (cat) => {
+    switch (cat?.toLowerCase()) {
       case 'frontend': return Code2;
       case 'backend': return Server;
-      case 'design': return Palette;
       case 'database': return Database;
+      case 'design': return Palette;
       default: return Award;
     }
   };
 
-  const getCategoryColor = (category) => {
-    switch (category.toLowerCase()) {
-      case 'frontend': return 'from-blue-500 to-blue-600';
-      case 'backend': return 'from-green-500 to-green-600';
-      case 'design': return 'from-purple-500 to-purple-600';
-      case 'database': return 'from-orange-500 to-orange-600';
-      default: return 'from-gray-500 to-gray-600';
-    }
-  };
-
-  const skillsByCategory = useMemo(() => {
-    if (!skills || skills.length === 0) return [];
-    
+  const byCategory = useMemo(() => {
+    if (!skills.length) return [];
     const grouped = {};
-    skills.forEach(skill => {
-      const category = skill.category || 'Other';
-      if (!grouped[category]) {
-        grouped[category] = [];
-      }
-      grouped[category].push(skill);
+    skills.forEach(s => {
+      const cat = s.category || 'Other';
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(s);
     });
-
-    return Object.entries(grouped)
-      .map(([category, skills]) => ({
-        category,
-        skills: skills.sort((a, b) => b.proficiency - a.proficiency),
-        icon: getCategoryIcon(category),
-        color: getCategoryColor(category)
-      }));
+    return Object.entries(grouped).map(([cat, items]) => ({ cat, items: items.sort((a,b) => b.proficiency - a.proficiency) }));
   }, [skills]);
 
-  const previewCategories = skillsByCategory.slice(0, 4);
+  const preview = byCategory.slice(0, 4);
+
+  // Default skills for display when loading
+  const defaultSkills = [
+    { cat: 'Frontend', items: [{ name: 'React', proficiency: 90 }, { name: 'Tailwind CSS', proficiency: 85 }, { name: 'JavaScript', proficiency: 95 }] },
+    { cat: 'Backend', items: [{ name: 'Node.js', proficiency: 85 }, { name: 'Express.js', proficiency: 80 }, { name: 'REST APIs', proficiency: 85 }] },
+    { cat: 'Database', items: [{ name: 'MongoDB', proficiency: 80 }, { name: 'Supabase', proficiency: 75 }, { name: 'PostgreSQL', proficiency: 70 }] },
+    { cat: 'Tools', items: [{ name: 'Git', proficiency: 88 }, { name: 'Vercel', proficiency: 85 }, { name: 'VS Code', proficiency: 92 }] },
+  ];
+
+  const displayData = preview.length > 0 ? preview : defaultSkills;
+
+  const SkillRow = ({ skill }) => (
+    <div style={{ marginBottom: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+        <span style={{ color: '#c4b5fd', fontSize: '0.82rem', fontWeight: 500 }}>{skill.name}</span>
+        <span style={{ color: '#7c3aed', fontSize: '0.75rem', fontWeight: 600 }}>{skill.proficiency}%</span>
+      </div>
+      <div className="skill-bar-track">
+        <div className="skill-bar-fill" style={{ width: `${skill.proficiency}%` }} />
+      </div>
+    </div>
+  );
 
   if (isLoading && skills.length === 0) {
     return (
-      <Section
-        id="skills"
-        title="Skills & Expertise"
-        subtitle="Technologies and tools I work with"
-        className="bg-gray-50 rounded-3xl"
-      >
-        <div className="flex justify-center py-12">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <Section id="skills" title="My Skills" dark>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px' }}>
+          {[1,2,3,4].map(i => <div key={i} className="skeleton" style={{ height: '220px', borderRadius: '16px' }} />)}
         </div>
       </Section>
     );
@@ -68,108 +65,59 @@ const SkillsPreview = () => {
 
   return (
     <>
-      <Section
-        id="skills"
-        title="Skills & Expertise"
-        subtitle="Technologies and tools I work with"
-        className="bg-gray-50 rounded-3xl"
-      >
-        {previewCategories.length > 0 ? (
-          <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {previewCategories.map((categoryData, index) => {
-                const Icon = categoryData.icon;
-                return (
-                  <div 
-                    key={index} 
-                    className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover-lift"
-                  >
-                    <div className={`inline-flex p-3 bg-gradient-to-r ${categoryData.color} rounded-xl mb-4`}>
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-4">{categoryData.category}</h3>
-                    <ul className="space-y-2">
-                      {categoryData.skills.slice(0, 5).map((skill, skillIndex) => (
-                        <li key={skillIndex} className="text-gray-600">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-medium text-sm">{skill.name}</span>
-                            <span className="text-xs text-gray-500">{skill.proficiency}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600"
-                              style={{ width: `${skill.proficiency}%` }}
-                            />
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+      <Section id="skills" title="My Skills" subtitle="Technologies and tools I work with daily" dark>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }} className="skills-grid">
+          {displayData.map((group, i) => {
+            const Icon = getCategoryIcon(group.cat);
+            return (
+              <div key={i} className="dark-card" style={{ padding: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem' }}>
+                  <div style={{
+                    width: '36px', height: '36px',
+                    background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(236,72,153,0.2))',
+                    borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}>
+                    <Icon size={16} color="#a78bfa" />
                   </div>
-                );
-              })}
-            </div>
+                  <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, color: '#f1f0ff', fontSize: '0.9rem' }}>{group.cat}</span>
+                </div>
+                {group.items.slice(0, 5).map((s, si) => <SkillRow key={si} skill={s} />)}
+              </div>
+            );
+          })}
+        </div>
 
-            <div className="text-center mt-12">
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                View All {skills.length} Skills
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-12">
-            <Award className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Skills Available</h3>
-            <p className="text-gray-600">Skills will be displayed here once added to the CMS.</p>
+        {skills.length > 0 && (
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+            <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+              View All {skills.length} Skills
+            </button>
           </div>
         )}
       </Section>
 
-      {/* All Skills Modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="All Skills & Expertise"
-        size="xl"
-      >
-        <div className="space-y-8">
-          {skillsByCategory.map((categoryData, index) => {
-            const Icon = categoryData.icon;
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="All Skills & Expertise" size="xl">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem' }}>
+          {byCategory.map((group, i) => {
+            const Icon = getCategoryIcon(group.cat);
             return (
-              <div key={index} className="border-b border-gray-200 last:border-0 pb-8 last:pb-0">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`inline-flex p-3 bg-gradient-to-r ${categoryData.color} rounded-xl`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900">{categoryData.category}</h3>
-                  <span className="ml-auto text-sm text-gray-500">
-                    {categoryData.skills.length} skills
-                  </span>
+              <div key={i}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '1px solid rgba(124,58,237,0.15)' }}>
+                  <Icon size={18} color="#8b5cf6" />
+                  <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#f1f0ff' }}>{group.cat}</span>
+                  <span style={{ marginLeft: 'auto', color: '#524f6e', fontSize: '0.75rem' }}>{group.items.length} skills</span>
                 </div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  {categoryData.skills.map((skill, skillIndex) => (
-                    <div key={skillIndex} className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-gray-900">{skill.name}</span>
-                        <span className="text-sm font-semibold text-blue-600">{skill.proficiency}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div 
-                          className={`h-2.5 rounded-full bg-gradient-to-r ${categoryData.color}`}
-                          style={{ width: `${skill.proficiency}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                {group.items.map((s, si) => <SkillRow key={si} skill={s} />)}
               </div>
             );
           })}
         </div>
       </Modal>
+
+      <style>{`
+        @media (max-width: 900px) { .skills-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media (max-width: 500px) { .skills-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </>
   );
 };
