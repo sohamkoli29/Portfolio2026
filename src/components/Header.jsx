@@ -24,9 +24,11 @@ const Header = () => {
     { name: 'Services', href: '#services' },
     { name: 'Works', href: '#projects' },
     { name: 'About', href: '#about' },
+     { name: 'Experience', href: '#experience' },
     { name: 'Skills', href: '#skills' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Contact', href: '#contact' },
+   
   ];
 
   const handleCVDownload = () => {

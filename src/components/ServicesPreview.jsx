@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Code, Palette, Smartphone, Cloud, CheckCircle, ArrowUpRight } from 'lucide-react';
+import { Code, Palette, Smartphone,Server,TrendingUp, Settings, Layout , Cloud, CheckCircle, ArrowUpRight, } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 import Section from './Section';
 import Modal from './Modal';
@@ -9,7 +9,7 @@ const ServicesPreview = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedService, setSelectedService] = useState(null);
 
-  const getIcon = (name) => ({ code: Code, palette: Palette, smartphone: Smartphone, cloud: Cloud }[name?.toLowerCase()] || Code);
+  const getIcon = (name) => ({ code: Code, layout: Layout, palette: Palette, smartphone: Smartphone, cloud: Cloud }[name?.toLowerCase()] || Code);
 
   const defaults = [
     { id: 1, title: 'Full Stack Development', description: 'End-to-end web apps using React, Node.js, and modern databases with clean architecture.', icon: 'code', features: ['React & Next.js', 'Node.js & Express', 'REST & GraphQL APIs', 'MongoDB & PostgreSQL'] },
