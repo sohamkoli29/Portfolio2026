@@ -172,7 +172,7 @@ const ExperiencePreview = () => {
             {
               period: "2023 — 2027",
               title: "B.E. Computer Engineering",
-              org: "University",
+              org: "Pimpri Chinchwad University",
               type: "degree",
             },
             {
