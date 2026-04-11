@@ -32,8 +32,7 @@ const Header = () => {
   ];
 
   const handleCVDownload = () => {
-    if (about?.cv_url) window.open(about.cv_url, '_blank');
-    else window.location.href = '#contact';
+    window.location.href = '#contact';
   };
 
   const linkStyle = { color: '#9490b5', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 500, transition: 'color 0.2s' };

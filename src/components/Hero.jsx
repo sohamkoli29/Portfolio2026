@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Mail,Download } from 'lucide-react';
 import { usePortfolio } from '../context/PortfolioContext';
 
 const Hero = () => {
@@ -8,7 +8,7 @@ const Hero = () => {
   const stats = [
     { value: experiences.length ? `${experiences.length}+` : '2+', label: 'Years of\nExperience' },
     { value: projects.length ? `${projects.length}+` : '10+', label: 'Projects\nCompleted' },
-    { value: '1.5K', label: 'Happy\nClients' },
+   
     { value: skills.length ? `${skills.length}+` : '20+', label: 'Technologies\nMastered' },
   ];
 
@@ -49,16 +49,18 @@ const Hero = () => {
               <a href="#projects" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                 View Works <ArrowRight size={14} />
               </a>
-              <a href="#contact" className="btn-outline" style={{ textDecoration: 'none' }}>
-                Download CV
-              </a>
+          {about?.cv_url && (
+                          <a href={about.cv_url} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <Download size={13} /> Download CV
+                          </a>
+                        )}
             </div>
 
             <div className="hero-socials" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               {[
                 { icon: Github, href: 'https://github.com/sohamkoli29' },
-                { icon: Linkedin, href: 'https://linkedin.com' },
-                { icon: Twitter, href: 'https://twitter.com' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/in/soham029/' },
+                ,
               ].map(({ icon: Icon, href }) => (
                 <a key={href} href={href} target="_blank" rel="noopener noreferrer"
                   style={{ width: '38px', height: '38px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9490b5', transition: 'all 0.2s', textDecoration: 'none' }}
