@@ -79,8 +79,8 @@ const CertificatesPreview = () => {
         )}
       </Section>
 
-      {selected && (
-        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="md">
+            {selected && (
+        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="md" zIndex={110}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {selected.image_url && <img src={selected.image_url} alt={selected.title} style={{ width: '100%', borderRadius: '12px', border: '1px solid rgba(124,58,237,0.2)' }} />}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

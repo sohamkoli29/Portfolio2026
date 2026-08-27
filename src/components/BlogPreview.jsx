@@ -84,8 +84,8 @@ const BlogPreview = () => {
         )}
       </Section>
 
-      {selected && (
-        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="lg">
+            {selected && (
+        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="lg" zIndex={110}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {selected.cover_image && <img src={selected.cover_image} alt={selected.title} style={{ width: '100%', height: '240px', objectFit: 'cover', borderRadius: '12px' }} />}
             <div style={{ display: 'flex', gap: '16px', color: '#9490b5', fontSize: '0.82rem' }}>

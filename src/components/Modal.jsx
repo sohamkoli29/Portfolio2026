@@ -1,14 +1,14 @@
 import React from 'react';
 import { X } from 'lucide-react';
 
-const Modal = ({ isOpen, onClose, title, children, size = 'md', showCloseButton = true }) => {
+const Modal = ({ isOpen, onClose, title, children, size = 'md', showCloseButton = true, zIndex = 100 }) => {
   if (!isOpen) return null;
 
   const sizes = { sm: '480px', md: '680px', lg: '880px', xl: '1100px', full: '95vw' };
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
+      style={{ position: 'fixed', inset: 0, zIndex, overflowY: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
       onClick={onClose}
     >
       {/* Backdrop */}

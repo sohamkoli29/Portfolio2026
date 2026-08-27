@@ -28,23 +28,15 @@ function App() {
           <Hero />
 
           <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.ServicesPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.ProjectsPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
             <LazyComponents.AboutPreview />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.ExperiencePreview />
+            <LazyComponents.SkillsPreview />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.SkillsPreview />
+            <LazyComponents.ExperiencePreview />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
@@ -56,11 +48,19 @@ function App() {
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.BlogPreview />
+            <LazyComponents.ProjectsPreview />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.ServicesPreview />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
             <LazyComponents.TestimonialsPreview />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <LazyComponents.BlogPreview />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>

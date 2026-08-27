@@ -140,8 +140,9 @@ const ProjectsPreview = () => {
       </Section>
 
       {/* Project modal */}
+            {/* Project modal */}
       {selectedProject && (
-        <Modal isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} title={selectedProject.title} size="lg">
+        <Modal isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} title={selectedProject.title} size="lg" zIndex={110}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {selectedProject.image_url && (
               <img src={selectedProject.image_url} alt={selectedProject.title} style={{ width: '100%', height: '260px', objectFit: 'cover', borderRadius: '12px', opacity: 0.85 }} />

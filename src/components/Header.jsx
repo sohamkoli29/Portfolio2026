@@ -21,12 +21,15 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: 'Services', href: '#services' },
-    { name: 'Works', href: '#projects' },
     { name: 'About', href: '#about' },
-     { name: 'Experience', href: '#experience' },
     { name: 'Skills', href: '#skills' },
+     { name: 'Experience', href: '#experience' },
+    { name: 'Certificates', href: '#certificates' },
+    { name: 'Achievements', href: '#achievements' },
+    { name: 'Works', href: '#projects' },
+    { name: 'Services', href: '#services' }, 
     { name: 'Testimonials', href: '#testimonials' },
+    { name: 'Blog', href: '#blog' },
     { name: 'Contact', href: '#contact' },
    
   ];

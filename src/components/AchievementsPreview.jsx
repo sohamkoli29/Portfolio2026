@@ -96,8 +96,8 @@ const AchievementsPreview = () => {
         )}
       </Section>
 
-      {selected && (
-        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="md">
+            {selected && (
+        <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected.title} size="md" zIndex={110}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {selected.image_url && <img src={selected.image_url} alt={selected.title} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '12px' }} />}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
