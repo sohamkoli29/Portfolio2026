@@ -1,75 +1,24 @@
-import React, { Suspense } from 'react';
-import { PortfolioProvider } from './context/PortfolioContext';
-import ErrorBoundary from './components/ErrorBoundary';
-import Layout from './components/Layout';
-import Hero from './components/Hero';
-import LoadingScreen from './components/LoadingScreen';
-import * as LazyComponents from './components/LazyComponents';
+import { Routes, Route } from 'react-router-dom';
+import SmoothScroll from './motion/SmoothScroll.jsx';
+import Layout from './components/Layout.jsx';
+import Home from './pages/Home.jsx';
+import ProjectDetail from './pages/ProjectDetail.jsx';
+import BlogList from './pages/BlogList.jsx';
+import BlogPost from './pages/BlogPost.jsx';
+import NotFound from './pages/NotFound.jsx';
 
-const SectionLoader = () => (
-  <div style={{ padding: '5rem 0', display: 'flex', justifyContent: 'center' }}>
-    <div style={{
-      width: '32px', height: '32px',
-      border: '2px solid rgba(124,58,237,0.2)',
-      borderTopColor: '#7c3aed',
-      borderRadius: '50%',
-      animation: 'spin 0.8s linear infinite'
-    }} />
-    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-  </div>
-);
-
-function App() {
+export default function App() {
   return (
-    <ErrorBoundary>
-      <PortfolioProvider>
-        <LoadingScreen />
-        <Layout>
-          <Hero />
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.AboutPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.SkillsPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.ExperiencePreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.CertificatesPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.AchievementsPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.ProjectsPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.ServicesPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.TestimonialsPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.BlogPreview />
-          </Suspense>
-
-          <Suspense fallback={<SectionLoader />}>
-            <LazyComponents.Contact />
-          </Suspense>
-        </Layout>
-      </PortfolioProvider>
-    </ErrorBoundary>
+    <SmoothScroll>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="projects/:slug" element={<ProjectDetail />} />
+          <Route path="blog" element={<BlogList />} />
+          <Route path="blog/:slug" element={<BlogPost />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </SmoothScroll>
   );
 }
-
-export default App;

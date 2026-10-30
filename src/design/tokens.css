@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* Palette: porcelain paper, ink text, marigold for warmth, dusk blue for focus and links. */
+@theme {
+  --color-porcelain: #faf8f4;
+  --color-sand: #ece6db;
+  --color-ink: #1b1a17;
+  --color-ink-soft: #5e5a52;
+  --color-marigold: #f2a93b;
+  --color-dusk: #3a3fa8;
+
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-porcelain);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: 5rem;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  ::selection { background: var(--color-marigold); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-dusk); outline-offset: 3px; border-radius: 4px; }
+  a { text-underline-offset: 3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Blog article body (HTML from the CMS) */
+.prose-article { max-width: 68ch; }
+.prose-article p { margin: 1.1em 0; }
+.prose-article h2 { font-size: 1.75rem; margin: 2em 0 0.6em; }
+.prose-article ul { list-style: disc; padding-left: 1.4em; margin: 1em 0; }
+.prose-article li { margin: 0.35em 0; }
+.prose-article a { color: var(--color-dusk); text-decoration: underline; }
+
+
+/* ---------- Phase 3: motion ---------- */
+
+/* Content fades and rises into place when it scrolls into view (see components/Reveal.jsx) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s var(--ease-soft), transform 0.9s var(--ease-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal][data-in] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Letters of the headline rise one after another (see components/KineticText.jsx) */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.55em) rotate(2deg); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  display: inline-block;
+  opacity: 0;
+  animation: rise 0.9s var(--ease-soft) forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Cards that tilt toward the pointer (see components/Tilt.jsx) */
+.tilt-card {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.35s var(--ease-soft);
+  will-change: transform;
+}
