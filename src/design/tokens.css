@@ -86,3 +86,11 @@
   transition: transform 0.35s var(--ease-soft);
   will-change: transform;
 }
+
+
+/* ---------- Phase 4: loader ---------- */
+@keyframes loader-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(200%); }
+}
+.loader-bar { animation: loader-slide 1.4s var(--ease-soft) infinite; }

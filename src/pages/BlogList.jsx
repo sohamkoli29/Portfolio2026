@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useBlogPosts } from '../api/queries.js';
+import { usePageMeta } from '../hooks/usePageMeta.js';
 import AsyncBlock from '../components/AsyncBlock.jsx';
 
 export default function BlogList() {
+  usePageMeta('Writing', 'Articles and notes by Soham Koli on web development and building real-world projects.');
   const query = useBlogPosts();
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">

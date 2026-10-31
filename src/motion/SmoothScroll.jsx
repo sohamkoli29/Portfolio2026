@@ -8,7 +8,8 @@ export default function SmoothScroll({ children }) {
   const reduced = useReducedMotion();
   useEffect(() => {
     if (reduced) return undefined;
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+        // anchors: links like href="#work" glide to their section; offset clears the sticky header
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, anchors: { offset: -70 } });
     let frame;
     const raf = (t) => {
       lenis.raf(t);
